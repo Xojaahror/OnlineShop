@@ -1,0 +1,60 @@
+﻿{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href={% url "products:home" %} rel="nofollow">Home</a>
+                    <span></span> Shop
+                    <span></span> Wishlist
+                </div>
+            </div>
+        </div>
+        <section class="mt-60 mb-60">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table shopping-summery text-center">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col" colspan="2">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Stock Status</th>
+                                        <th scope="col">Action</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in wishlist %}
+                                    <tr>
+                                        <td class="image product-thumbnail"><img src="{{item.product.product_image.first.img.url}}" alt="#"></td>
+                                        <td class="product-des product-name">
+                                            <p class="product-name"><a href="{% url "products:product" item.product.uuid %}">{{item.product.title}}</a></p>
+                                            <p class="font-xs">{{item.product.discription|safe}}
+                                            </p>
+                                        </td>
+                                        <td class="price" data-title="Price"><span>{{item.product.get_descount}} </span></td>
+                                        <td class="text-center" data-title="Stock">
+                                            {% if item.product.is_active %}
+                                            <span class="color3 font-weight-bold">In Stock</span>
+                                            {% else %}
+                                            <span class="text-danger font-weight-bold">Out of stock</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right" data-title="Cart">
+                                            <a class="btn btn-rounded btn-sm" href={% url "order:create_cart" item.product.uuid %}><i class="far fa-shopping-bag mr-5"></i>Add to cart</a>
+                                        </td>
+                                        <td class="action" data-title="Remove"><a href="{% url "order:delete_wishlist_item" item.uuid %}"><i class="fa fa-trash-alt"></i></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
